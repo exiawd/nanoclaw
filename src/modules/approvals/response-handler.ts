@@ -17,6 +17,7 @@
  */
 import { wakeContainer } from '../../container-runner.js';
 import { deletePendingApproval, getPendingApproval, getSession } from '../../db/sessions.js';
+import { namespacedPlatformId } from '../../platform-id.js';
 import type { ResponsePayload } from '../../response-registry.js';
 import { log } from '../../log.js';
 import { writeSessionMessage } from '../../session-manager.js';
@@ -128,7 +129,7 @@ async function handleRegisteredApproval(
 
 function namespacedUserId(payload: ResponsePayload): string | null {
   if (!payload.userId) return null;
-  return payload.userId.includes(':') ? payload.userId : `${payload.channelType}:${payload.userId}`;
+  return namespacedPlatformId(payload.channelType, payload.userId);
 }
 
 function isAuthorizedApprovalClick(approval: PendingApproval, payload: ResponsePayload): boolean {
